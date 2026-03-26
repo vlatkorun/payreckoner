@@ -1,0 +1,17 @@
+services:
+  php:
+    image: thecodingmachine/php:8.4-v5-slim-cli
+    environment:
+      PHP_EXTENSION_REDIS: 1
+      PHP_EXTENSION_XDEBUG: 1
+      TEMPLATE_PHP_INI: development
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

@@ -1,7 +1,6 @@
-
 # PayReckoner — CLAUDE.md (Root)
 
-This file provides general project guidelines for Claude Code.
+This file provides general project guidelines for Claude Code when working with code in this repository..
 Each component under `src/` has its own `CLAUDE.md` with domain-specific rules.
 When working inside a subdirectory, read both this file and the local one.
 
@@ -17,7 +16,7 @@ through four sequential stages:
 3. **Fraud Engine** — real-time stateful detection (velocity, spike, round-trip)
 4. **Reconciler** — bidirectional comparison of internal ledger vs bank settlement file
 
-For full functional specification of all four parts, see [`REQUIREMENTS.md`](./REQUIREMENTS.md).
+For full functional specification of all four parts, see [`REQUIREMENTS.md`](./docs/REQUIREMENTS.md).
 
 The engine is intentionally framework-light: a Symfony Console application with
 no HTTP layer, no ORM, and no database. All state lives in memory per run.
@@ -141,6 +140,39 @@ These rules apply everywhere in the codebase without exception:
 
 ---
 
+## Docker
+
+The project runs in Docker via `docker-compose.yml`. Two services are defined:
+
+- **php** — `thecodingmachine/php:8.4-v5-slim-cli`, mounted at `/usr/src/app`
+  with the Redis and Xdebug extensions enabled
+- **redis** — `redis:7-alpine`, exposed on port `6379`
+
+Extensions are enabled via environment variables (`PHP_EXTENSION_REDIS=1`,
+`PHP_EXTENSION_XDEBUG=1`). Xdebug's `client_host` is auto-configured for macOS
+via `host.docker.internal`.
+
+### Make commands
+
+Use the `Makefile` at the project root to manage the environment:
+
+```bash
+make up                # Start all containers in detached mode
+make down              # Stop and remove containers
+make restart           # Full stop + start cycle
+make logs              # Tail all container logs
+make ps                # Show container status
+make composer-install  # Install Composer dependencies inside the php container
+make shell             # Open an interactive bash shell inside the php container
+make test              # Run the full test suite
+make test-unit         # Run unit tests only (Ledger, Fee, Fraud, Reconciliation, Transaction)
+make test-integration  # Run integration tests only (full pipeline end-to-end)
+```
+
+For full functional specification of the Docker containers, see [`DOCKER.md`](./docs/DOCKER.md).
+
+---
+
 ## Testing
 
 - **Test file location:** mirrors `src/` exactly. `src/Fee/FeeEngine.php` →
@@ -155,11 +187,23 @@ These rules apply everywhere in the codebase without exception:
 - **Monetary assertions:** always assert the exact integer value. Never use
   `assertEqualsWithDelta` on monetary output
 
-Run the full suite:
+Run tests via Make (executes inside the Docker container):
 ```bash
-composer test          # alias for vendor/bin/phpunit
-composer analyse       # alias for vendor/bin/phpstan analyse --level=8
-composer fix           # alias for vendor/bin/php-cs-fixer fix
+make test              # full test suite
+make test-unit         # unit tests only (Ledger, Fee, Fraud, Reconciliation, Transaction)
+make test-integration  # integration tests only (full pipeline end-to-end)
+```
+
+## Code Quality
+
+Run static analysis via Make (executes inside the Docker container):
+```bash
+make analyse # alias for vendor/bin/phpstan analyse --level=8
+```
+
+Run code style and formatting via Make (executes inside the Docker container):
+```bash
+make fix # alias for vendor/bin/php-cs-fixer fix
 ```
 
 ---
