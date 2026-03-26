@@ -246,6 +246,12 @@ Avoid `setUp()` where a data provider suffices.
 
 ---
 
+## Git Commits
+
+Before committing changes, **ALWAYS** use the `/commit` skill. It enforces conventional commit format, ensures the message explains both what and why, and forbids generic messages or Claude attributions. No exceptions — every `git commit` must go through this skill.
+
+---
+
 ## Fixtures
 
 Dummy transaction data is generated on-the-fly via the `GenerateFixturesCommand`
