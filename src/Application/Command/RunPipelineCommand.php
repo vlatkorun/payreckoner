@@ -11,6 +11,7 @@ use PayReckoner\Domain\Ledger\LedgerProcessor;
 use PayReckoner\Domain\Pipeline\Pipeline;
 use PayReckoner\Domain\Reconciliation\Reconciler;
 use PayReckoner\Domain\Reconciliation\SettlementEntry;
+use PayReckoner\Domain\Transaction\Currency;
 use PayReckoner\Domain\Transaction\Transaction;
 use PayReckoner\Domain\Transaction\TransactionType;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -95,7 +96,7 @@ class RunPipelineCommand extends Command
                 id: $row['id'],
                 type: TransactionType::from($row['type']),
                 amount: $row['amount'],
-                currency: $row['currency'],
+                currency: Currency::from($row['currency']),
                 merchant: $row['merchant'],
                 timestamp: $row['timestamp'],
             ),
@@ -115,7 +116,7 @@ class RunPipelineCommand extends Command
             static fn(array $row): FeeRule => new FeeRule(
                 priority: $row['priority'],
                 merchant: $row['merchant'] ?? null,
-                currency: $row['currency'] ?? null,
+                currency: isset($row['currency']) ? Currency::from($row['currency']) : null,
                 minAmount: $row['minAmount'] ?? null,
                 maxAmount: $row['maxAmount'] ?? null,
                 feeBps: $row['feeBps'],
@@ -136,7 +137,7 @@ class RunPipelineCommand extends Command
             static fn(array $row): SettlementEntry => new SettlementEntry(
                 txId: $row['txId'],
                 settledAmount: $row['settledAmount'],
-                currency: $row['currency'],
+                currency: Currency::from($row['currency']),
             ),
             $data,
         );

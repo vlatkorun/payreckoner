@@ -1,6 +1,6 @@
 services:
   php:
-    image: thecodingmachine/php:8.4-v5-slim-cli
+    image: thecodingmachine/php:8.4-v5-cli
     environment:
       PHP_EXTENSION_REDIS: 1
       PHP_EXTENSION_XDEBUG: 1

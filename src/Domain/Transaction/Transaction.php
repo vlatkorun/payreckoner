@@ -10,7 +10,7 @@ readonly class Transaction
         public string $id,
         public TransactionType $type,
         public int $amount,
-        public string $currency,
+        public Currency $currency,
         public string $merchant,
         public int $timestamp,
     ) {}
