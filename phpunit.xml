@@ -7,14 +7,15 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>tests/Transaction</directory>
-            <directory>tests/Ledger</directory>
-            <directory>tests/Fee</directory>
-            <directory>tests/Fraud</directory>
-            <directory>tests/Reconciliation</directory>
+            <directory>tests/Domain/Transaction</directory>
+            <directory>tests/Domain/Ledger</directory>
+            <directory>tests/Domain/Fee</directory>
+            <directory>tests/Domain/Fraud</directory>
+            <directory>tests/Domain/Reconciliation</directory>
+            <directory>tests/Application</directory>
         </testsuite>
         <testsuite name="Integration">
-            <file>tests/PipelineTest.php</file>
+            <file>tests/Domain/Pipeline/PipelineTest.php</file>
         </testsuite>
     </testsuites>
 

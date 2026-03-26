@@ -254,12 +254,3 @@ checked into the repository. Integration test fixtures are defined inline in
 `tests/Domain/Pipeline/PipelineTest.php`.
 
 ---
-
-## What This Project Is Not
-
-- Not an HTTP API — do not add routing, controllers, or request/response objects
-- Not a database-backed system — do not add Doctrine, migrations, or persistence
-- Not a queue consumer — transactions are processed in a single batch per run
-- Not multi-tenant at runtime — one Pipeline run processes one merchant dataset
-
-If requirements expand in those directions, raise it before adding dependencies.
