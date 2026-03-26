@@ -23,27 +23,48 @@ no HTTP layer, no ORM, and no database. All state lives in memory per run.
 
 ---
 
-## Repository Structure
+## Application Structure
+
+The project follows Domain-Driven Design with three layers under `src/`:
 
 ```
-payreckoner/
-├── bin/payreckoner          # Console entrypoint
-├── src/
-│   ├── Transaction/         # Shared DTOs and enums (Transaction, TransactionType)
-│   ├── Ledger/              # Part 1 — balance accumulation
-│   ├── Fee/                 # Part 2 — fee rule engine
-│   ├── Fraud/               # Part 3 — fraud detection
-│   ├── Reconciliation/      # Part 4 — settlement reconciliation
-│   └── Pipeline.php         # Orchestrates all four stages in order
-├── tests/                   # Mirrors src/ structure exactly
-├── var/fixtures/            # Sample JSON inputs for manual CLI runs
-├── composer.json
-├── phpunit.xml
-├── phpstan.neon
-└── .php-cs-fixer.php
+src/
+├── Domain/                          # Pure domain logic — no framework dependencies
+│   ├── Transaction/                 # Shared DTOs and enums (Transaction, TransactionType)
+│   ├── Fee/                         # Fee rule engine (FeeEngine, FeeRule, FeeResult)
+│   ├── Fraud/                       # Fraud detection (FraudEngine, FraudFlag, FraudResult)
+│   ├── Ledger/                      # Balance accumulation (LedgerProcessor, LedgerEntry)
+│   ├── Reconciliation/              # Settlement reconciliation (Reconciler, Discrepancy, etc.)
+│   └── Pipeline/                    # Orchestrator (Pipeline, PipelineResult)
+│
+├── Application/                     # Use cases — bridges user intent to domain
+│   └── Command/
+│       ├── RunPipelineCommand.php   # Console command: reads JSON, runs Pipeline, formats output
+│       └── GenerateFixturesCommand.php  # Console command: generates dummy data
+│
+└── Infrastructure/                  # Framework plumbing
+    └── Console/
+        └── Application.php          # Symfony Console bootstrap (registers commands)
 ```
 
-Each `src/` subdirectory has its own `CLAUDE.md` describing internal structure,
+Supporting files at the project root:
+
+```
+bin/payreckoner              # Console entrypoint — boots Infrastructure\Console\Application
+tests/                       # Mirrors src/ structure exactly (Domain/, Application/)
+composer.json
+phpunit.xml
+phpstan.neon
+.php-cs-fixer.php
+```
+
+**Layer rules:**
+- `Domain/` has zero dependencies on `Application/` or `Infrastructure/`
+- `Application/` depends on `Domain/` only
+- `Infrastructure/` depends on `Application/` and `Domain/`
+- `bin/payreckoner` depends on `Infrastructure/` only
+
+Each `src/Domain/` subdirectory has its own `CLAUDE.md` describing internal structure,
 rules, and implementation constraints specific to that component.
 
 ---
@@ -175,10 +196,11 @@ For full functional specification of the Docker containers, see [`DOCKER.md`](./
 
 ## Testing
 
-- **Test file location:** mirrors `src/` exactly. `src/Fee/FeeEngine.php` →
-  `tests/Fee/FeeEngineTest.php`
+- **Test file location:** mirrors `src/` exactly. `src/Domain/Fee/FeeEngine.php` →
+  `tests/Domain/Fee/FeeEngineTest.php`
 - **Each part has its own test suite.** Do not write cross-component tests in a
-  component's own test file — cross-component behaviour belongs in `tests/PipelineTest.php`
+  component's own test file — cross-component behaviour belongs in
+  `tests/Domain/Pipeline/PipelineTest.php`
 - **Always test edge cases explicitly:** empty input, zero balance, no matching fee
   rule, fewer than 3 prior credits (Rule B skip), negative balance, EXTRA and MISSING
   in both reconciliation directions
@@ -226,15 +248,10 @@ Avoid `setUp()` where a data provider suffices.
 
 ## Fixtures
 
-Sample JSON files live in `var/fixtures/`. Maintain at minimum:
-
-- `transactions.json` — 10 transactions covering all edge cases
-- `fee_rules.json` — rules covering specific merchant, wildcard, and catch-all cases
-- `settlement.json` — settlement file with at least one MATCH, MISSING, EXTRA,
-  and AMOUNT_MISMATCH entry
-
-These are used by the CLI commands for manual runs and serve as integration test
-fixtures in `tests/PipelineTest.php`.
+Dummy transaction data is generated on-the-fly via the `GenerateFixturesCommand`
+console command (`bin/payreckoner generate:fixtures`). No fixture files are
+checked into the repository. Integration test fixtures are defined inline in
+`tests/Domain/Pipeline/PipelineTest.php`.
 
 ---
 
