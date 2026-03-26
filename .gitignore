@@ -1,0 +1,35 @@
+# Dependencies
+/vendor/
+
+# Composer
+composer.phar
+
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+
+# PHPStan
+.phpstan.cache/
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+.php_cs.cache
+
+# Runtime / build output
+/var/cache/
+/var/log/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local

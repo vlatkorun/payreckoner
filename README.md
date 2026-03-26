@@ -7,3 +7,23 @@ It ships a real-time fraud detection layer covering velocity abuse, amount spike
 At end-of-day, it reconciles your internal ledger against bank settlement files, surfacing missing, extra, and mismatched transactions with per-currency disputed amount totals. 
 
 The entire pipeline is designed around the constraints of real payment infrastructure: integer arithmetic throughout, net-of-fee precision at every stage, and clean separation between the ledger, fee, fraud, and reconciliation concerns.
+
+## Testing
+
+Run the full test suite:
+
+```bash
+composer test
+```
+
+Run unit tests only (per-component: Ledger, Fee, Fraud, Reconciliation, Transaction):
+
+```bash
+composer test -- --testsuite Unit
+```
+
+Run integration tests only (full pipeline end-to-end):
+
+```bash
+composer test -- --testsuite Integration
+```
