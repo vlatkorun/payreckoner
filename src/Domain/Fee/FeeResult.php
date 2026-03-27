@@ -11,5 +11,6 @@ readonly class FeeResult
         public int $fee,
         public int $netAmount,
         public ?int $matchedPriority,
-    ) {}
+    ) {
+    }
 }

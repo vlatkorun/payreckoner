@@ -165,13 +165,14 @@ These rules apply everywhere in the codebase without exception:
 
 The project runs in Docker via `docker-compose.yml`. Two services are defined:
 
-- **php** — `thecodingmachine/php:8.4-v5-slim-cli`, mounted at `/usr/src/app`
-  with the Redis and Xdebug extensions enabled
+- **php** — `thecodingmachine/php:8.4-v5-cli`, mounted at `/usr/src/app`
+  with the Redis and Xdebug extensions enabled. Runs `sleep infinity` to stay
+  alive as a long-running container (`tty: true`).
 - **redis** — `redis:7-alpine`, exposed on port `6379`
 
 Extensions are enabled via environment variables (`PHP_EXTENSION_REDIS=1`,
-`PHP_EXTENSION_XDEBUG=1`). Xdebug's `client_host` is auto-configured for macOS
-via `host.docker.internal`.
+`PHP_EXTENSION_XDEBUG=1`). `TEMPLATE_PHP_INI=development` loads development
+PHP ini defaults.
 
 ### Make commands
 
@@ -196,11 +197,14 @@ For full functional specification of the Docker containers, see [`DOCKER.md`](./
 
 ## Testing
 
-- **Test file location:** mirrors `src/` exactly. `src/Domain/Fee/FeeEngine.php` →
-  `tests/Domain/Fee/FeeEngineTest.php`
+- **Test file location:** split by type under `tests/Unit/` and `tests/Integration/`,
+  mirroring the `src/` structure beneath. `src/Domain/Fee/FeeEngine.php` →
+  `tests/Unit/Domain/Fee/FeeEngineTest.php`
+- **Namespaces:** `PayReckoner\Tests\Unit\...` for unit tests,
+  `PayReckoner\Tests\Integration\...` for integration tests
 - **Each part has its own test suite.** Do not write cross-component tests in a
   component's own test file — cross-component behaviour belongs in
-  `tests/Domain/Pipeline/PipelineTest.php`
+  `tests/Integration/Domain/Pipeline/PipelineTest.php`
 - **Always test edge cases explicitly:** empty input, zero balance, no matching fee
   rule, fewer than 3 prior credits (Rule B skip), negative balance, EXTRA and MISSING
   in both reconciliation directions

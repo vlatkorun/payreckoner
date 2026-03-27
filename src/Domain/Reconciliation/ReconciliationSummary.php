@@ -15,5 +15,6 @@ readonly class ReconciliationSummary
         public array $discrepancyBreakdown,
         /** @var array<string, int> currency => disputed amount */
         public array $disputedAmountsByCurrency,
-    ) {}
+    ) {
+    }
 }

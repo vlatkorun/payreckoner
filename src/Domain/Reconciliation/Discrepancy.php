@@ -10,5 +10,6 @@ readonly class Discrepancy
         public string $txId,
         public DiscrepancyType $type,
         public ?int $difference,
-    ) {}
+    ) {
+    }
 }

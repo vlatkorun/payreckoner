@@ -13,5 +13,6 @@ readonly class Transaction
         public Currency $currency,
         public string $merchant,
         public int $timestamp,
-    ) {}
+    ) {
+    }
 }

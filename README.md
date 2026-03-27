@@ -10,6 +10,8 @@ through four sequential stages:
 3. **Fraud Engine** — real-time stateful detection (velocity, spike, round-trip)
 4. **Reconciler** — bidirectional comparison of internal ledger vs bank settlement file
 
+For full functional specification of all four parts, see [`REQUIREMENTS.md`](./docs/REQUIREMENTS.md).
+
 The engine is intentionally framework-light: a Symfony Console application with
 no HTTP layer, no ORM, and no database. All state lives in memory per run.
 

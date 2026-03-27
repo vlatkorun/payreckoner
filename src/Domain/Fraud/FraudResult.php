@@ -15,5 +15,6 @@ readonly class FraudResult
         public int $timestamp,
         /** @var FraudFlag[] */
         public array $flags,
-    ) {}
+    ) {
+    }
 }

@@ -12,5 +12,7 @@ class Reconciler
      * @param FeeResult[]       $feeResults
      * @param SettlementEntry[] $settlementEntries
      */
-    public function reconcile(array $feeResults, array $settlementEntries): ReconciliationReport {}
+    public function reconcile(array $feeResults, array $settlementEntries): ReconciliationReport
+    {
+    }
 }

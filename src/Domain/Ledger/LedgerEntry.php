@@ -12,5 +12,6 @@ readonly class LedgerEntry
         public string $merchant,
         public Currency $currency,
         public int $balance,
-    ) {}
+    ) {
+    }
 }

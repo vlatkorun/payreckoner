@@ -15,5 +15,6 @@ readonly class FeeRule
         public ?int $minAmount,
         public ?int $maxAmount,
         public int $feeBps,
-    ) {}
+    ) {
+    }
 }

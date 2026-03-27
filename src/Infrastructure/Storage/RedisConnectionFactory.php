@@ -8,7 +8,9 @@ use PayReckoner\Infrastructure\Config\ConfigurationLoader;
 
 readonly class RedisConnectionFactory
 {
-    public function __construct(private ConfigurationLoader $config) {}
+    public function __construct(private ConfigurationLoader $config)
+    {
+    }
 
     public function create(): \Redis
     {

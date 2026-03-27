@@ -12,5 +12,6 @@ readonly class SettlementEntry
         public string $txId,
         public int $settledAmount,
         public Currency $currency,
-    ) {}
+    ) {
+    }
 }

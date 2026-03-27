@@ -19,7 +19,8 @@ class ConfigurationLoader
     public function __construct(
         private readonly string $configPath,
         private readonly array $definitions,
-    ) {}
+    ) {
+    }
 
     public function get(string $key): mixed
     {

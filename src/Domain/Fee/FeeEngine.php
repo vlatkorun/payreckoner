@@ -13,5 +13,7 @@ class FeeEngine
      * @param FeeRule[]     $rules
      * @return FeeResult[]
      */
-    public function process(array $transactions, array $rules): array {}
+    public function process(array $transactions, array $rules): array
+    {
+    }
 }

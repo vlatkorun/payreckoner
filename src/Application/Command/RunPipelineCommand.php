@@ -92,7 +92,7 @@ class RunPipelineCommand extends Command
         $data = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
 
         return array_map(
-            static fn(array $row): Transaction => new Transaction(
+            static fn (array $row): Transaction => new Transaction(
                 id: $row['id'],
                 type: TransactionType::from($row['type']),
                 amount: $row['amount'],
@@ -113,7 +113,7 @@ class RunPipelineCommand extends Command
         $data = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
 
         return array_map(
-            static fn(array $row): FeeRule => new FeeRule(
+            static fn (array $row): FeeRule => new FeeRule(
                 priority: $row['priority'],
                 merchant: $row['merchant'] ?? null,
                 currency: isset($row['currency']) ? Currency::from($row['currency']) : null,
@@ -134,7 +134,7 @@ class RunPipelineCommand extends Command
         $data = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
 
         return array_map(
-            static fn(array $row): SettlementEntry => new SettlementEntry(
+            static fn (array $row): SettlementEntry => new SettlementEntry(
                 txId: $row['txId'],
                 settledAmount: $row['settledAmount'],
                 currency: Currency::from($row['currency']),

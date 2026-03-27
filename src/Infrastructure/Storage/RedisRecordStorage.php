@@ -10,7 +10,9 @@ class RedisRecordStorage implements RecordStorageInterface
 {
     private ?\Redis $redis = null;
 
-    public function __construct(private readonly RedisConnectionFactory $connectionFactory) {}
+    public function __construct(private readonly RedisConnectionFactory $connectionFactory)
+    {
+    }
 
     /**
      * @param list<array<string, mixed>> $records

@@ -10,5 +10,6 @@ readonly class ReconciliationReport
         /** @var Discrepancy[] */
         public array $discrepancies,
         public ReconciliationSummary $summary,
-    ) {}
+    ) {
+    }
 }

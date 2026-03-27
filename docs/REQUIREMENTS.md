@@ -12,14 +12,14 @@ All monetary amounts are in **minor units** (e.g. 1000 = $10.00 USD).
 
 Every transaction has the following fields:
 
-| Field | Type | Description |
-|---|---|---|
-| `id` | `string` | Unique transaction identifier |
-| `type` | `string` | `CREDIT` or `DEBIT` |
-| `amount` | `int` | Minor units, always positive |
-| `currency` | `string` | ISO 4217 code (e.g. `USD`, `EUR`) |
-| `merchant` | `string` | Lowercase alphanumeric merchant identifier |
-| `timestamp` | `int` | Unix timestamp in seconds |
+| Field       | Type     | Description                                |
+|-------------|----------|--------------------------------------------|
+| `id`        | `string` | Unique transaction identifier              |
+| `type`      | `string` | `CREDIT` or `DEBIT`                        |
+| `amount`    | `int`    | Minor units, always positive               |
+| `currency`  | `string` | ISO 4217 code (e.g. `USD`, `EUR`)          |
+| `merchant`  | `string` | Lowercase alphanumeric merchant identifier |
+| `timestamp` | `int`    | Unix timestamp in seconds                  |
 
 **Constraints:** No duplicate IDs. Up to 100,000 transactions per run.
 
