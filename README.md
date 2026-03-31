@@ -35,9 +35,15 @@ src/
 │       └── GenerateFixturesCommand.php  # Console command: generates dummy data
 │
 └── Infrastructure/                  # Framework plumbing
+    ├── Config/                      # Configuration loading (ConfigurationLoader, definitions)
+    ├── Storage/                     # Redis connection and record storage
     └── Console/
-        └── Application.php          # Symfony Console bootstrap (registers commands)
+        └── Application.php          # Symfony Console bootstrap — builds DI container, registers commands
 ```
+
+Service wiring uses `symfony/dependency-injection`. All service definitions live in
+`config/services.yaml` and are loaded at boot time via `YamlFileLoader`. Domain config
+(e.g. Redis connection settings) is read from `config/redis.php`.
 
 **Layer rules:**
 - `Domain/` has zero dependencies on `Application/` or `Infrastructure/`

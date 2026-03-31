@@ -1,0 +1,27 @@
+parameters:
+
+services:
+    PayReckoner\Infrastructure\Config\Definition\RedisConfiguration: ~
+
+    PayReckoner\Infrastructure\Config\ConfigurationLoader:
+        arguments:
+            $configPath: '%config_path%'
+            $definitions:
+                redis: '@PayReckoner\Infrastructure\Config\Definition\RedisConfiguration'
+
+    PayReckoner\Infrastructure\Storage\RedisConnectionFactory:
+        arguments:
+            - '@PayReckoner\Infrastructure\Config\ConfigurationLoader'
+
+    PayReckoner\Infrastructure\Storage\RedisRecordStorage:
+        arguments:
+            - '@PayReckoner\Infrastructure\Storage\RedisConnectionFactory'
+
+    PayReckoner\Application\Service\FixtureGenerator: ~
+
+    PayReckoner\Application\Command\RunPipelineCommand: ~
+
+    PayReckoner\Application\Command\GenerateFixturesCommand:
+        arguments:
+            - '@PayReckoner\Application\Service\FixtureGenerator'
+            - '@PayReckoner\Infrastructure\Storage\RedisRecordStorage'

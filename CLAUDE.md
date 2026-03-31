@@ -43,14 +43,19 @@ src/
 │       └── GenerateFixturesCommand.php  # Console command: generates dummy data
 │
 └── Infrastructure/                  # Framework plumbing
+    ├── Config/                      # Configuration loading (ConfigurationLoader, definitions)
+    ├── Storage/                     # Redis connection and record storage
     └── Console/
-        └── Application.php          # Symfony Console bootstrap (registers commands)
+        └── Application.php          # Symfony Console bootstrap — builds DI container, registers commands
 ```
 
 Supporting files at the project root:
 
 ```
 bin/payreckoner              # Console entrypoint — boots Infrastructure\Console\Application
+config/
+├── redis.php                # Redis connection config (reads from env vars)
+└── services.yaml            # Symfony DI service definitions for all Infrastructure/Application services
 tests/                       # Mirrors src/ structure exactly (Domain/, Application/)
 composer.json
 phpunit.xml
@@ -63,6 +68,13 @@ phpstan.neon
 - `Application/` depends on `Domain/` only
 - `Infrastructure/` depends on `Application/` and `Domain/`
 - `bin/payreckoner` depends on `Infrastructure/` only
+
+**Dependency Injection:**
+Service wiring uses `symfony/dependency-injection` with `symfony/yaml`. All service
+definitions live in `config/services.yaml`. `Application.php` builds a `ContainerBuilder`,
+sets the `%config_path%` parameter (absolute path to `config/`), loads `services.yaml`
+via `YamlFileLoader`, compiles the container, then pulls out command instances to register.
+No service is instantiated manually in `Application.php`.
 
 Each `src/Domain/` subdirectory has its own `CLAUDE.md` describing internal structure,
 rules, and implementation constraints specific to that component.

@@ -6,11 +6,9 @@ namespace PayReckoner\Infrastructure\Console;
 
 use PayReckoner\Application\Command\GenerateFixturesCommand;
 use PayReckoner\Application\Command\RunPipelineCommand;
-use PayReckoner\Application\Service\FixtureGenerator;
-use PayReckoner\Infrastructure\Config\ConfigurationLoader;
-use PayReckoner\Infrastructure\Config\Definition\RedisConfiguration;
-use PayReckoner\Infrastructure\Storage\RedisConnectionFactory;
-use PayReckoner\Infrastructure\Storage\RedisRecordStorage;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Console\Application as BaseApplication;
 
 class Application extends BaseApplication
@@ -19,17 +17,20 @@ class Application extends BaseApplication
     {
         parent::__construct('PayReckoner', '1.0.0');
 
-        $config = new ConfigurationLoader(
-            configPath: dirname(__DIR__, 3) . '/config',
-            definitions: [
-                'redis' => new RedisConfiguration(),
-            ],
-        );
+        $container = new ContainerBuilder();
+        $container->setParameter('config_path', dirname(__DIR__, 3) . '/config');
 
-        $storage = new RedisRecordStorage(new RedisConnectionFactory($config));
-        $generator = new FixtureGenerator();
+        $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__, 3) . '/config'));
+        $loader->load('services.yaml');
 
-        $this->add(new RunPipelineCommand());
-        $this->add(new GenerateFixturesCommand($generator, $storage));
+        $container->compile();
+
+        $runPipeline = $container->get(RunPipelineCommand::class);
+  
+        $this->addCommand($runPipeline);
+
+        $generateFixtures = $container->get(GenerateFixturesCommand::class);
+
+        $this->addCommand($generateFixtures);
     }
 }
