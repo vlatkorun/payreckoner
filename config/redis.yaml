@@ -1,0 +1,8 @@
+parameters:
+    env(REDIS_HOST): 'localhost'
+    env(REDIS_PORT): '6379'
+    env(REDIS_DB): '0'
+
+    redis.host: '%env(string:REDIS_HOST)%'
+    redis.port: '%env(int:REDIS_PORT)%'
+    redis.database: '%env(int:REDIS_DB)%'

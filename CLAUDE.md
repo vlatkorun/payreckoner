@@ -175,6 +175,8 @@ These rules apply everywhere in the codebase without exception:
 
 ## Docker
 
+**All PHP CLI commands — including tests, static analysis, code style, and `bin/payreckoner` — must be run inside the Docker container via `make` or `docker compose exec php ...`. Never run `php`, `vendor/bin/*`, or `composer` directly on the host machine.**
+
 The project runs in Docker via `docker-compose.yml`. Two services are defined:
 
 - **php** — `thecodingmachine/php:8.4-v5-cli`, mounted at `/usr/src/app`

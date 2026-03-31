@@ -54,7 +54,7 @@ class GenerateFixturesCommand extends Command
 
         $totalTransactions = count($fixtures['transactions']);
         $io->success(
-            "Generated {$totalTransactions} transactions for {$merchantCount} merchants and stored in Redis.",
+            "Generated {$totalTransactions} transactions for {$merchantCount} merchants and stored in storage.",
         );
 
         return Command::SUCCESS;

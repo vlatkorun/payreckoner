@@ -21,16 +21,17 @@ class Application extends BaseApplication
         $container->setParameter('config_path', dirname(__DIR__, 3) . '/config');
 
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__, 3) . '/config'));
+        $loader->load('redis.yaml');
         $loader->load('services.yaml');
 
         $container->compile();
 
+        /** @var RunPipelineCommand $runPipeline */
         $runPipeline = $container->get(RunPipelineCommand::class);
-  
         $this->addCommand($runPipeline);
 
+        /** @var GenerateFixturesCommand $generateFixtures */
         $generateFixtures = $container->get(GenerateFixturesCommand::class);
-
         $this->addCommand($generateFixtures);
     }
 }

@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace PayReckoner\Infrastructure\Storage;
 
-use PayReckoner\Infrastructure\Config\ConfigurationLoader;
-
 readonly class RedisConnectionFactory
 {
-    public function __construct(private ConfigurationLoader $config)
-    {
+    public function __construct(
+        private string $host,
+        private int $port,
+        private int $database,
+    ) {
     }
 
     public function create(): \Redis
     {
         $redis = new \Redis();
-        $redis->connect(
-            (string) $this->config->get('redis.host'),
-            (int) $this->config->get('redis.port'),
-        );
-        $redis->select((int) $this->config->get('redis.database'));
+        $redis->connect($this->host, $this->port);
+        $redis->select($this->database);
 
         return $redis;
     }
