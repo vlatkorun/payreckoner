@@ -277,4 +277,7 @@ console command (`bin/payreckoner generate:fixtures`). No fixture files are
 checked into the repository. Integration test fixtures are defined inline in
 `tests/Domain/Pipeline/PipelineTest.php`.
 
+For full details on fixture generation logic, class responsibilities, and output
+shapes, see [`src/Application/Service/Fixtures/CLAUDE.md`](./src/Application/Service/Fixtures/CLAUDE.md).
+
 ---

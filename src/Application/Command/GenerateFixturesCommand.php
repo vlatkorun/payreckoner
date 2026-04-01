@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PayReckoner\Application\Command;
 
 use PayReckoner\Application\Port\RecordStorageInterface;
-use PayReckoner\Application\Service\FixtureGenerator;
+use PayReckoner\Application\Service\Fixtures\FixtureGenerator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,18 +38,13 @@ class GenerateFixturesCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        /** @var string $merchantsStr */
-        $merchantsStr = $input->getArgument('merchants');
-        $merchantCount = (int) $merchantsStr;
-
-        /** @var string $countStr */
-        $countStr = $input->getOption('count');
-        $transactionsPerMerchant = (int) $countStr;
+        $merchantCount = (int) $input->getArgument('merchants');
+        $transactionsPerMerchant = (int) $input->getOption('count');
 
         $fixtures = $this->generator->generate($merchantCount, $transactionsPerMerchant);
 
-        $this->storage->store('fixtures:transactions', $fixtures['transactions']);
-        $this->storage->store('fixtures:fee_rules', $fixtures['feeRules']);
+        $this->storage->storeTransactions($fixtures['transactions']);
+        $this->storage->storeFeeRules($fixtures['feeRules']);
         $this->storage->store('fixtures:settlement_entries', $fixtures['settlementEntries']);
 
         $totalTransactions = count($fixtures['transactions']);

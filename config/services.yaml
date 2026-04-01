@@ -9,11 +9,18 @@ services:
         arguments:
             - '@PayReckoner\Infrastructure\Storage\RedisConnectionFactory'
 
-    PayReckoner\Application\Service\FixtureGenerator: ~
+    PayReckoner\Application\Service\Fixtures\TransactionFixtureGenerator: ~
+
+    PayReckoner\Application\Service\Fixtures\FeeRuleFixtureGenerator: ~
+
+    PayReckoner\Application\Service\Fixtures\FixtureGenerator:
+        arguments:
+            - '@PayReckoner\Application\Service\Fixtures\TransactionFixtureGenerator'
+            - '@PayReckoner\Application\Service\Fixtures\FeeRuleFixtureGenerator'
 
     PayReckoner\Application\Command\RunPipelineCommand: ~
 
     PayReckoner\Application\Command\GenerateFixturesCommand:
         arguments:
-            - '@PayReckoner\Application\Service\FixtureGenerator'
+            - '@PayReckoner\Application\Service\Fixtures\FixtureGenerator'
             - '@PayReckoner\Infrastructure\Storage\RedisRecordStorage'

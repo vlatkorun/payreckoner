@@ -76,6 +76,36 @@ make shell
 For the full list of available `make` commands, see [`CLAUDE.md`](./CLAUDE.md).
 For Docker container details, see [`docs/DOCKER.md`](./docs/DOCKER.md).
 
+## Fixtures
+
+Before running the pipeline, populate the data store with dummy data using the
+`generate:fixtures` command. Commands like `run:pipeline` depend on this data
+being present.
+
+```bash
+docker compose exec php bin/payreckoner generate:fixtures <merchants> [--count=<n>]
+```
+
+- `<merchants>` — number of merchants to generate (required)
+- `--count` / `-c` — number of transactions per merchant (default: `10`)
+
+Example — 5 merchants with 20 transactions each:
+
+```bash
+docker compose exec php bin/payreckoner generate:fixtures 5 --count=20
+```
+
+This stores three sets of records:
+
+| Record set | Contents |
+|------------|----------|
+| `transactions` | Generated `Transaction` records |
+| `fee_rules` | Generated `FeeRule` records |
+| `settlement_entries` | Settlement entries derived from CREDIT transactions |
+
+No fixture files are checked into the repository. Re-run the command any time
+you want a fresh data set.
+
 ## Testing
 
 Run the full test suite:
