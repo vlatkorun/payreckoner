@@ -36,14 +36,16 @@ src/
 │
 └── Infrastructure/                  # Framework plumbing
     ├── Config/                      # Configuration loading (ConfigurationLoader, definitions)
-    ├── Storage/                     # Redis connection and record storage
+    ├── Storage/
+│   │   └── Redis/                   # Redis connection and record storage (RedisConnectionFactory, RedisRecordStorage)
     └── Console/
         └── Application.php          # Symfony Console bootstrap — builds DI container, registers commands
 ```
 
 Service wiring uses `symfony/dependency-injection`. All service definitions live in
-`config/services.yaml` and are loaded at boot time via `YamlFileLoader`. Domain config
-(e.g. Redis connection settings) is read from `config/redis.php`.
+`config/services.yaml` and are loaded at boot time via `YamlFileLoader`. Redis connection
+parameters are loaded from `config/redis.yaml`, which resolves the `REDIS_HOST`, `REDIS_PORT`,
+and `REDIS_DB` environment variables into DI parameters.
 
 **Layer rules:**
 - `Domain/` has zero dependencies on `Application/` or `Infrastructure/`

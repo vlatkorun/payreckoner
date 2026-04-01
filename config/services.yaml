@@ -1,13 +1,13 @@
 services:
-    PayReckoner\Infrastructure\Storage\RedisConnectionFactory:
+    PayReckoner\Infrastructure\Storage\Redis\RedisConnectionFactory:
         arguments:
             $host: '%redis.host%'
             $port: '%redis.port%'
             $database: '%redis.database%'
 
-    PayReckoner\Infrastructure\Storage\RedisRecordStorage:
+    PayReckoner\Infrastructure\Storage\Redis\RedisRecordStorage:
         arguments:
-            - '@PayReckoner\Infrastructure\Storage\RedisConnectionFactory'
+            - '@PayReckoner\Infrastructure\Storage\Redis\RedisConnectionFactory'
 
     PayReckoner\Application\Service\Fixtures\TransactionFixtureGenerator: ~
 
@@ -23,4 +23,4 @@ services:
     PayReckoner\Application\Command\GenerateFixturesCommand:
         arguments:
             - '@PayReckoner\Application\Service\Fixtures\FixtureGenerator'
-            - '@PayReckoner\Infrastructure\Storage\RedisRecordStorage'
+            - '@PayReckoner\Infrastructure\Storage\Redis\RedisRecordStorage'

@@ -44,7 +44,8 @@ src/
 │
 └── Infrastructure/                  # Framework plumbing
     ├── Config/                      # Configuration loading (ConfigurationLoader, definitions)
-    ├── Storage/                     # Redis connection and record storage
+    ├── Storage/
+│   │   └── Redis/                   # Redis connection and record storage (RedisConnectionFactory, RedisRecordStorage)
     └── Console/
         └── Application.php          # Symfony Console bootstrap — builds DI container, registers commands
 ```
@@ -54,7 +55,7 @@ Supporting files at the project root:
 ```
 bin/payreckoner              # Console entrypoint — boots Infrastructure\Console\Application
 config/
-├── redis.php                # Redis connection config (reads from env vars)
+├── redis.yaml               # Redis DI parameters — resolves REDIS_HOST/PORT/DB env vars into %redis.*% parameters
 └── services.yaml            # Symfony DI service definitions for all Infrastructure/Application services
 tests/                       # Mirrors src/ structure exactly (Domain/, Application/)
 composer.json
@@ -72,9 +73,11 @@ phpstan.neon
 **Dependency Injection:**
 Service wiring uses `symfony/dependency-injection` with `symfony/yaml`. All service
 definitions live in `config/services.yaml`. `Application.php` builds a `ContainerBuilder`,
-sets the `%config_path%` parameter (absolute path to `config/`), loads `services.yaml`
-via `YamlFileLoader`, compiles the container, then pulls out command instances to register.
+sets the `%config_path%` parameter (absolute path to `config/`), loads `config/redis.yaml`
+(registers `%redis.*%` parameters from env vars), then loads `config/services.yaml`, compiles
+the container, and pulls out command instances to register.
 No service is instantiated manually in `Application.php`.
+For full details on Redis wiring, see [`src/Infrastructure/Storage/Redis/CLAUDE.md`](./src/Infrastructure/Storage/Redis/CLAUDE.md).
 
 Each `src/Domain/` subdirectory has its own `CLAUDE.md` describing internal structure,
 rules, and implementation constraints specific to that component.
