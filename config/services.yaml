@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'redis.yaml' }
+
 services:
     PayReckoner\Infrastructure\Storage\Redis\RedisConnectionFactory:
         arguments:

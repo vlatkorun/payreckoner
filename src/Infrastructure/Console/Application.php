@@ -21,7 +21,6 @@ class Application extends BaseApplication
         $container->setParameter('config_path', dirname(__DIR__, 3) . '/config');
 
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__, 3) . '/config'));
-        $loader->load('redis.yaml');
         $loader->load('services.yaml');
 
         $container->compile();
